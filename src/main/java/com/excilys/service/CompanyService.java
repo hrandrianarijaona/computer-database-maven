@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.excilys.connection.ConnectionFactory;
 import com.excilys.dao.CompanyDAOImpl;
@@ -20,14 +21,19 @@ import com.excilys.service.LogService.TypeLog;
  * @author hrandr
  *
  */
+@Service
 public class CompanyService {
 	
 	private Logger log = null;
-	private LogServiceImpl logService;
 	
+	@Autowired
+	private LogServiceImpl logService;
+	@Autowired
 	private ConnectionFactory connectionFactory;
+	@Autowired
 	private CompanyDAOImpl companyDAO;
 	
+	@Autowired
 	public CompanyService(ConnectionFactory connectionFactory, CompanyDAOImpl companyDAO, LogServiceImpl logService) {
 		// TODO Auto-generated constructor stub
 		log = LoggerFactory.getLogger(this.getClass());

@@ -13,6 +13,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import org.springframework.stereotype.Repository;
+
 import com.excilys.connection.ConnectionFactory;
 import com.excilys.connection.ProjetConnection;
 import com.excilys.om.Company;
@@ -22,6 +24,7 @@ import com.excilys.om.Company;
  * @author hrandr
  *
  */
+@Repository
 public class CompanyDAOImpl implements CompanyDAO{
 	
 

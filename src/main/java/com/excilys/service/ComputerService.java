@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.connection.ConnectionFactory;
 import com.excilys.dao.ComputerDAOImpl;
@@ -21,13 +23,18 @@ import com.excilys.service.LogService.TypeLog;
  * @author hrandr
  *
  */
+@Service
 public class ComputerService {
 	
 	private Logger log = null;
+	@Autowired
 	private ConnectionFactory connectionFactory;
+	@Autowired
 	private ComputerDAOImpl computerDAO;
+	@Autowired
 	private LogServiceImpl logService;
 	
+	@Autowired
 	public ComputerService(ConnectionFactory connectionFactory, ComputerDAOImpl computerDAO, LogServiceImpl logService) {
 		// TODO Auto-generated constructor stub
 		log = LoggerFactory.getLogger(this.getClass());

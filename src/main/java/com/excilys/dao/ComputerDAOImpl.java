@@ -16,12 +16,14 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.connection.ConnectionFactory;
 import com.excilys.connection.ProjetConnection;
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
 
+@Repository
 public class ComputerDAOImpl implements ComputerDAO{
 
 	private ComputerDAOImpl() {

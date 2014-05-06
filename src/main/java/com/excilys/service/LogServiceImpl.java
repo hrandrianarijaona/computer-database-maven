@@ -4,14 +4,19 @@ import java.sql.Connection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.dao.LogDAOImpl;
 
+@Service
 public class LogServiceImpl implements LogService {
 	
 	private Logger log = null;
+	@Autowired
 	private LogDAOImpl logDAO;
 	
+	@Autowired
 	public LogServiceImpl(LogDAOImpl logDAO) {
 		// TODO Auto-generated constructor stub
 		log = LoggerFactory.getLogger(this.getClass());

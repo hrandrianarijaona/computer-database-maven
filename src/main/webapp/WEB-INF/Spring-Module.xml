@@ -14,7 +14,7 @@
 
 	<!-- ANNOTATIONS POUR LA CREATION DE BEANS -->
 	<context:component-scan base-package="com.excilys" />
-	
+<!-- 	
 	<bean id="connectionFactory" class="com.excilys.connection.ConnectionFactory" />
 	
 	<bean id="computerDAOImpl" class="com.excilys.dao.ComputerDAOImpl" />
@@ -39,6 +39,6 @@
 		<constructor-arg ref="logServiceImpl" />
 	</bean>
 	
-	
+ -->	
  
 </beans>
