@@ -12,8 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import com.excilys.dao.ComputerDAO;
+import com.excilys.dao.ComputerDAOImpl;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
@@ -21,9 +24,24 @@ import com.excilys.om.Page;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
+@Component
 @WebServlet("/AddComputerServlet")
 public class AddComputerServlet extends HttpServlet {
 
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
+	}
+	
+	@Autowired
+	private CompanyService companyService;
+	
+	@Autowired
+	private ComputerService computerService;
+	
+	
 	public AddComputerServlet() {
 		// TODO Auto-generated constructor stub
 	}
@@ -82,20 +100,20 @@ public class AddComputerServlet extends HttpServlet {
 			c.setIntroducedDate(introducedDate);
 			c.setDiscontinuedDate(discontinuedDate);
 			// On récupère la Company correspondante
-			c.setCompany(CompanyService.getInstance().findCompanyById(idCompany));
+			c.setCompany(companyService.findCompanyById(idCompany));
 
 			// On insère le computer dans la base
-			ComputerService.getInstance().insertComputer(c);
+			computerService.insertComputer(c);
 
 			// compte le nb de Computer dans la base
-			int nbComputer = ComputerService.getInstance().getNbComputer();
+			int nbComputer = computerService.getNbComputer();
 			request.setAttribute("nbComputer", nbComputer);
 
 			// liste les Computers
-			List<Computer> computerList = ComputerService.getInstance().searchComputersByFilteringAndOrderingWithRange(sFiltre, page, interval, code, true);
+			List<Computer> computerList = computerService.searchComputersByFilteringAndOrderingWithRange(sFiltre, page, interval, code, true);
 			request.setAttribute("computerList", computerList);
 			
-			int nbPage = (int) Math.ceil(ComputerService.getInstance().getListComputers().size()/interval);
+			int nbPage = (int) Math.ceil(computerService.getListComputers().size()/interval);
 
 			Page<Computer> laPage = new Page<>(nbComputer, page, interval, code, nbPage, sFiltre, computerList);
 			request.setAttribute("pageComputer", laPage);
@@ -111,7 +129,7 @@ public class AddComputerServlet extends HttpServlet {
 			
 			// On envoi le message d'erreur
 			request.setAttribute("msg", msg.toString());
-			List<Company> companyList = CompanyService.getInstance().getListCompany();
+			List<Company> companyList = companyService.getListCompany();
 			request.setAttribute("companyList", companyList);
 			this.getServletContext().getRequestDispatcher( "/WEB-INF/addComputer.jsp" ).forward( request, response );
 		}

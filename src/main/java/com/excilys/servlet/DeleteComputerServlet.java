@@ -9,13 +9,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.dao.ComputerDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
+import com.excilys.dao.ComputerDAOImpl;
 import com.excilys.om.Computer;
 import com.excilys.service.ComputerService;
-
+@Component
 @WebServlet("/DeleteComputerServlet")
 public class DeleteComputerServlet extends HttpServlet {
 
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
+	}
+	
+	@Autowired
+	private ComputerService computerService;
+	
 	public DeleteComputerServlet() {
 		// TODO Auto-generated constructor stub
 	}
@@ -31,25 +45,25 @@ public class DeleteComputerServlet extends HttpServlet {
 			request.setAttribute("msg", sb.toString());
 
 			// compte le nb de Computer dans la base
-			int nbComputer = ComputerService.getInstance().getNbComputer();
+			int nbComputer = computerService.getNbComputer();
 			request.setAttribute("nbComputer", nbComputer);
 
 			// liste les Computers
-			List<Computer> computerList = ComputerService.getInstance().getListComputers();
+			List<Computer> computerList = computerService.getListComputers();
 			request.setAttribute("computerList", computerList);
 
 			this.getServletContext().getRequestDispatcher( "/WEB-INF/dashboard.jsp" ).forward( request, response );
 		}
 		else{
 			// On supprime le Computer de la base
-			ComputerService.getInstance().deleteComputer(id);
+			computerService.deleteComputer(id);
 
 			// compte le nb de Computer dans la base
-			int nbComputer = ComputerService.getInstance().getNbComputer();
+			int nbComputer = computerService.getNbComputer();
 			request.setAttribute("nbComputer", nbComputer);
 
 			// liste les Computers
-			List<Computer> computerList = ComputerService.getInstance().getListComputers();
+			List<Computer> computerList = computerService.getListComputers();
 			request.setAttribute("computerList", computerList);
 
 			this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );

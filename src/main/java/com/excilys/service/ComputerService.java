@@ -10,10 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.connection.ConnectionFactory;
-import com.excilys.dao.ComputerDAO;
-import com.excilys.dao.LogDAO;
+import com.excilys.dao.ComputerDAOImpl;
+import com.excilys.dao.LogDAOImpl;
 import com.excilys.om.Computer;
-import com.excilys.service.ILogService.TypeLog;
+import com.excilys.service.LogService.TypeLog;
 
 
 /**
@@ -21,14 +21,19 @@ import com.excilys.service.ILogService.TypeLog;
  * @author hrandr
  *
  */
-public enum ComputerService {
-	INSTANCE;
+public class ComputerService {
 	
 	private Logger log = null;
+	private ConnectionFactory connectionFactory;
+	private ComputerDAOImpl computerDAO;
+	private LogServiceImpl logService;
 	
-	private ComputerService() {
+	public ComputerService(ConnectionFactory connectionFactory, ComputerDAOImpl computerDAO, LogServiceImpl logService) {
 		// TODO Auto-generated constructor stub
 		log = LoggerFactory.getLogger(this.getClass());
+		this.connectionFactory = connectionFactory;
+		this.computerDAO = computerDAO;
+		this.logService = logService;
 	}
 	
 	
@@ -37,8 +42,8 @@ public enum ComputerService {
 	 * retourne l'unique instance de ComputerService
 	 * @return
 	 */
-	public static ComputerService getInstance(){
-		return INSTANCE;
+	public ComputerService getInstance(){
+		return this;
 	}
 	
 	/**
@@ -50,15 +55,15 @@ public enum ComputerService {
 		
 		Connection connection = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("findComputerById... " + connection);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			log.error("Probleme de connection niveau Service");
 			e.printStackTrace();
 		}
-		Computer computer = ComputerDAO.INSTANCE.findComputerById(paramId, connection);
-		ConnectionFactory.INSTANCE.disconnect();
+		Computer computer = computerDAO.findComputerById(paramId, connection);
+		connectionFactory.disconnect();
 		
 		return computer;
 	}
@@ -71,11 +76,11 @@ public enum ComputerService {
 		List<Computer> lc = null;
 		Connection connection = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("Listing des Computers... " + connection);
 			connection.setAutoCommit(false);
-			lc = ComputerDAO.INSTANCE.getListComputers(connection);
-			LogService.INSTANCE.addLog("Listing des Computers effectué...", TypeLog.INFOS, connection);
+			lc = computerDAO.getListComputers(connection);
+			logService.addLog("Listing des Computers effectué...", TypeLog.INFOS, connection);
 			connection.commit();
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
@@ -90,7 +95,7 @@ public enum ComputerService {
 			}
 			e.printStackTrace();
 		}
-		ConnectionFactory.INSTANCE.disconnect();
+		connectionFactory.disconnect();
 		
 		return lc;
 	}
@@ -104,7 +109,7 @@ public enum ComputerService {
 	public List<Computer> getListComputersByFilteringAndOrdering(int filter, boolean isAsc) {
 		Connection connection = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("getListComputersByFilteringAndOrdering... " + connection);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -113,8 +118,8 @@ public enum ComputerService {
 		}
 		List<Computer> lc = null;
 		
-		lc = ComputerDAO.INSTANCE.getListComputersByFilteringAndOrdering(filter, isAsc, connection);
-		ConnectionFactory.INSTANCE.disconnect();
+		lc = computerDAO.getListComputersByFilteringAndOrdering(filter, isAsc, connection);
+		connectionFactory.disconnect();
 		
 		
 		return lc;
@@ -129,7 +134,7 @@ public enum ComputerService {
 	public List<Computer> getListComputersWithRange(int rang, int interval) {
 		Connection connection = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("getListComputersWithRange... " + connection);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -138,8 +143,8 @@ public enum ComputerService {
 		}
 		List<Computer> lc = null;
 		
-		lc = ComputerDAO.INSTANCE.getListComputersWithRange(rang, interval, connection);
-		ConnectionFactory.INSTANCE.disconnect();
+		lc = computerDAO.getListComputersWithRange(rang, interval, connection);
+		connectionFactory.disconnect();
 		
 		return lc;
 	}
@@ -152,15 +157,15 @@ public enum ComputerService {
 	public int getNbComputer(){
 		Connection connection = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("getNbComputer... " + connection);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			log.error("Probleme de connection niveau Service");
 			e.printStackTrace();
 		}
-		int nbComputer = ComputerDAO.INSTANCE.getNbComputer(connection);
-		ConnectionFactory.INSTANCE.disconnect();
+		int nbComputer = computerDAO.getNbComputer(connection);
+		connectionFactory.disconnect();
 		
 		return nbComputer;
 	}
@@ -172,11 +177,11 @@ public enum ComputerService {
 		Connection connection = null;
 		Long id = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			connection.setAutoCommit(false);
-			id = ComputerDAO.getInstance().insertComputer(cp, connection);
+			id = computerDAO.insertComputer(cp, connection);
 			log.info("Insertion du Computer (" + id + ")..." + connection);
-			LogService.INSTANCE.addLog("Insertion du computer (" + id + ")", TypeLog.INFOS, connection);
+			logService.addLog("Insertion du computer (" + id + ")", TypeLog.INFOS, connection);
 			connection.commit();
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
@@ -192,7 +197,7 @@ public enum ComputerService {
 			}
 			e.printStackTrace();
 		}
-		ConnectionFactory.INSTANCE.disconnect();
+		connectionFactory.disconnect();
 		
 	}
 	
@@ -204,11 +209,11 @@ public enum ComputerService {
 		Connection connection = null;
 		try {
 			log.info("deleteComputer..." + connection);
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			
 			connection.setAutoCommit(false);
-			ComputerDAO.getInstance().deleteComputer(id, connection);
-			LogService.INSTANCE.addLog("Delete du computer id(" + id + ")", TypeLog.INFOS, connection);
+			computerDAO.deleteComputer(id, connection);
+			logService.addLog("Delete du computer id(" + id + ")", TypeLog.INFOS, connection);
 			connection.commit();
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
@@ -224,7 +229,7 @@ public enum ComputerService {
 				log.error("Probleme de rollback du deleteComputer...");
 			}
 		}
-		ConnectionFactory.INSTANCE.disconnect();
+		connectionFactory.disconnect();
 		
 	}
 	
@@ -236,15 +241,15 @@ public enum ComputerService {
 		Connection connection = null;
 		List<Computer> lc = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("searchComputers... " + connection);
-			lc = ComputerDAO.INSTANCE.searchComputers(word, connection);
+			lc = computerDAO.searchComputers(word, connection);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			log.error("Probleme dans searchComputers... " + connection);
 		}
-		ConnectionFactory.INSTANCE.disconnect();
+		connectionFactory.disconnect();
 		
 		return lc;
 	}
@@ -260,15 +265,15 @@ public enum ComputerService {
 		Connection connection = null;
 		List<Computer> lc = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("searchComputersByFilteringAndOrdering... " + connection);
-			lc = ComputerDAO.INSTANCE.searchComputersByFilteringAndOrdering(word, filter, isAsc, connection);
+			lc = computerDAO.searchComputersByFilteringAndOrdering(word, filter, isAsc, connection);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			log.error("Probleme dans searchComputersByFilteringAndOrdering...");
 		}
-		ConnectionFactory.INSTANCE.disconnect();
+		connectionFactory.disconnect();
 		
 		return lc;
 	}
@@ -286,15 +291,15 @@ public enum ComputerService {
 		Connection connection = null;
 		List<Computer> lc = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("searchComputersByFilteringAndOrderingWithRange... " + connection);
-			lc = ComputerDAO.INSTANCE.searchComputersByFilteringAndOrderingWithRange(word, rang, interval, filter, isAsc, connection);
+			lc = computerDAO.searchComputersByFilteringAndOrderingWithRange(word, rang, interval, filter, isAsc, connection);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			log.error("Probleme dans searchComputersByFilteringAndOrderingWithRange...");
 		}
-		ConnectionFactory.INSTANCE.disconnect();
+		connectionFactory.disconnect();
 		
 		return lc;
 	}
@@ -307,15 +312,15 @@ public enum ComputerService {
 		Connection connection = null;
 		List<Computer> lc = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("searchComputersWithRange... " + connection);
-			lc = ComputerDAO.INSTANCE.searchComputersWithRange(word, rang, interval, connection);
+			lc = computerDAO.searchComputersWithRange(word, rang, interval, connection);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			log.error("Probleme dans searchComputersWithRange");
 		}
-		ConnectionFactory.INSTANCE.disconnect();
+		connectionFactory.disconnect();
 		
 		return lc;
 	}
@@ -332,14 +337,14 @@ public enum ComputerService {
 		Connection connection = null;
 		List<Computer> lc = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("getListComputersByFilteringAndOrderingWithRange... " + connection);
-			lc = ComputerDAO.INSTANCE.getListComputersByFilteringAndOrderingWithRange(rang, interval, filter, isAsc, connection);
+			lc = computerDAO.getListComputersByFilteringAndOrderingWithRange(rang, interval, filter, isAsc, connection);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ConnectionFactory.INSTANCE.disconnect();
+		connectionFactory.disconnect();
 		
 		return lc;
 	}
@@ -351,11 +356,11 @@ public enum ComputerService {
 	public void updateComputer(Computer comp){
 		Connection connection = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("updateComputer("+ comp.getId() +")... " + connection);
 			connection.setAutoCommit(false);
-			ComputerDAO.getInstance().updateComputer(comp, connection);
-			LogService.INSTANCE.addLog("updateComputer("+ comp.getId() +")... ", TypeLog.INFOS, connection);
+			computerDAO.updateComputer(comp, connection);
+			logService.addLog("updateComputer("+ comp.getId() +")... ", TypeLog.INFOS, connection);
 			connection.commit();
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
@@ -372,7 +377,7 @@ public enum ComputerService {
 			}
 			
 		}
-		ConnectionFactory.INSTANCE.disconnect();
+		connectionFactory.disconnect();
 		
 	}
 	
@@ -384,15 +389,15 @@ public enum ComputerService {
 	public int getNbComputerFilter(String filter) {
 		Connection connection = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("getNbComputerFilter(" + filter + ")... " + connection);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			log.error("Probleme de connection niveau Service");
 			e.printStackTrace();
 		}
-		int nbComputer = ComputerDAO.INSTANCE.getNbComputerFilter(filter, connection);
-		ConnectionFactory.INSTANCE.disconnect();
+		int nbComputer = computerDAO.getNbComputerFilter(filter, connection);
+		connectionFactory.disconnect();
 		
 		return nbComputer;
 	}

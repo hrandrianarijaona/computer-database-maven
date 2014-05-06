@@ -9,15 +9,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.excilys.om.Computer;
 import com.excilys.service.ComputerService;
 
 /**
  * Servlet implementation class SearchComputerServlet
  */
+@Component
 @WebServlet("/SearchComputerServlet")
 public class SearchComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
+	}
+	
+	@Autowired
+	private ComputerService computerService;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -52,11 +67,11 @@ public class SearchComputerServlet extends HttpServlet {
 		System.out.println("coucou: " + request.getParameter("search") + "/" + page + "/" + interval);
 
 		// liste les Computers dans l'intervalle voulut
-		List<Computer> computerList = ComputerService.getInstance().searchComputersWithRange(search, page*interval, interval);
+		List<Computer> computerList = computerService.searchComputersWithRange(search, page*interval, interval);
 		request.setAttribute("computerList", computerList);
 
 		// liste les Computers dans l'intervalle voulut
-		List<Computer> allResultComputerList = ComputerService.getInstance().searchComputers(search);
+		List<Computer> allResultComputerList = computerService.searchComputers(search);
 		request.setAttribute("allResultComputerList", allResultComputerList);
 		
 		// nombre de page

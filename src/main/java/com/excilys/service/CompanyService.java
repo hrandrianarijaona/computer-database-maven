@@ -6,34 +6,42 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.connection.ConnectionFactory;
-import com.excilys.dao.CompanyDAO;
+import com.excilys.dao.CompanyDAOImpl;
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
-import com.excilys.service.ILogService.TypeLog;
+import com.excilys.service.LogService.TypeLog;
 
 /**
  * Classe singleton de service pour Company
  * @author hrandr
  *
  */
-public enum CompanyService {
-	INSTANCE;
+public class CompanyService {
 	
 	private Logger log = null;
+	private LogServiceImpl logService;
 	
-	private CompanyService() {
+	private ConnectionFactory connectionFactory;
+	private CompanyDAOImpl companyDAO;
+	
+	public CompanyService(ConnectionFactory connectionFactory, CompanyDAOImpl companyDAO, LogServiceImpl logService) {
 		// TODO Auto-generated constructor stub
 		log = LoggerFactory.getLogger(this.getClass());
+		this.connectionFactory = connectionFactory;
+		this.companyDAO = companyDAO;
+		this.logService = logService;
 	}
 	
 	/**
 	 * Sert à obtenir l'unique instance de CompanyService
 	 * @return
 	 */
-	public static CompanyService getInstance(){
-		return INSTANCE;
+	public CompanyService getInstance(){
+		return this;
 	}
 	
 	/**
@@ -44,15 +52,15 @@ public enum CompanyService {
 		Connection connection = null;
 		List<Company> lc = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("getListCompany... " + connection);
-			lc = CompanyDAO.INSTANCE.getListCompany(connection);
+			lc = companyDAO.getListCompany(connection);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			log.error("Probleme dans getListCompany...");
 		}
-		ConnectionFactory.INSTANCE.disconnect();
+		connectionFactory.disconnect();
 		
 		return lc;
 	}
@@ -65,11 +73,11 @@ public enum CompanyService {
 		Connection connection = null;
 		Long id = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			connection.setAutoCommit(false);
-			id = CompanyDAO.INSTANCE.insertCompany(cp, connection);
+			id = companyDAO.insertCompany(cp, connection);
 			log.info("insertCompany(" + id + ")" + connection);
-			LogService.INSTANCE.addLog("insertCompany(" + id + ")", TypeLog.INFOS, connection);
+			logService.addLog("insertCompany(" + id + ")", TypeLog.INFOS, connection);
 			connection.commit();
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
@@ -86,7 +94,7 @@ public enum CompanyService {
 			}
 			
 		}
-		ConnectionFactory.INSTANCE.disconnect();
+		connectionFactory.disconnect();
 		
 	}
 	
@@ -99,15 +107,15 @@ public enum CompanyService {
 		Connection connection = null;
 		Company cpy = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
+			connection = connectionFactory.getConnection();
 			log.info("findCompanyById(" + paramId + ") " + connection);
-			cpy = CompanyDAO.INSTANCE.findCompanyById(paramId, connection);
+			cpy = companyDAO.findCompanyById(paramId, connection);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			log.error("Probleme dans findCompanyById(" + paramId + ") ");
 		}
-		ConnectionFactory.INSTANCE.disconnect();
+		connectionFactory.disconnect();
 		
 		return cpy;
 	}

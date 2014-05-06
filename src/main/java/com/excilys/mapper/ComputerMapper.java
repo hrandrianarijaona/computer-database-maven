@@ -8,18 +8,18 @@ import com.excilys.om.Computer;
 import com.excilys.service.CompanyService;
 
 public class ComputerMapper {
-
+	
 	private ComputerMapper() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public static Computer mapComputer(ComputerDTO cdto){
+	public static Computer mapComputer(ComputerDTO cdto, CompanyService companyService){
 		Long id = Long.parseLong(cdto.getId());
 		String name = cdto.getName();
 		DateTime introducedDate = null;
 		DateTime discontinuedDate = null;
 		Long idCompany = Long.parseLong(cdto.getIdCompany());
-		Company company = CompanyService.getInstance().findCompanyById(idCompany);
+		Company company = companyService.findCompanyById(idCompany);
 		
 		if(cdto.getIntroducedDate()!=null)
 			introducedDate = new DateTime(cdto.getIntroducedDate());

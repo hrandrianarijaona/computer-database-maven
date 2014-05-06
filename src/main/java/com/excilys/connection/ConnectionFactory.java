@@ -13,8 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
-public enum ConnectionFactory {
-	INSTANCE;
+public class ConnectionFactory {
 	
 	private static final String PROPERTY_URL             = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
 	private static final String PROPERTY_DRIVER          = "com.mysql.jdbc.Driver";
@@ -22,7 +21,7 @@ public enum ConnectionFactory {
 	private static final String PROPERTY_MOT_DE_PASSE    = "root";
 	BoneCP connectionPool = null;
 	
-	public Logger log = null;
+	public static Logger log = null;
 	private static final ThreadLocal<Connection> threadConnection = new ThreadLocal<Connection>();
 	
 	private void load(){
@@ -58,9 +57,9 @@ public enum ConnectionFactory {
 	
 	
 	
-	private ConnectionFactory() {
+	public ConnectionFactory() {
 		// TODO Auto-generated constructor stub
-		
+		load();
 	}
 
 
@@ -76,8 +75,8 @@ public enum ConnectionFactory {
 	 * Méthode chargée de récupérer les informations de connexion à la base de
 	 * données, charger le driver JDBC et retourner une instance de la Factory
 	 */
-	public static ConnectionFactory getInstance(){
-		return INSTANCE;
+	public ConnectionFactory getInstance(){
+		return this;
 	}
 
 	/* Méthode chargée de fournir une connexion à la base de données */
@@ -114,7 +113,7 @@ public enum ConnectionFactory {
 	 * Methode de fermeture des objets utilisé par les DAOs
 	 * @param obj
 	 */
-	public void closeObject(Object... obj){
+	public static void closeObject(Object... obj){
 		for(Object o : obj){
 			if(o instanceof Connection){
 				if(o!=null){
