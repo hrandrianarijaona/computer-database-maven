@@ -10,49 +10,57 @@
 	
 	<properties>
 		<spring.version>3.0.5.RELEASE</spring.version>
+		<junit.version>3.8.1</junit.version>
+		<bonecp.version>0.8.0.RELEASE</bonecp.version>
+		<guava.version>17.0</guava.version>
+		<joda-time.version>2.3</joda-time.version>
+		<joda-time-jsptags>1.1.1</joda-time-jsptags>
+		<jstl.version>1.2</jstl.version>
+		<servlet.version>4.1.36</servlet.version>
+		<slf4j-api.version>1.7.7</slf4j-api.version>
 	</properties>
 	
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
-			<version>0.8.0.RELEASE</version>
+			<version>${bonecp.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>17.0</version>
+			<version>${guava.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.3</version>
+			<version>${joda-time.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time-jsptags</artifactId>
-			<version>1.1.1</version>
+			<version>${joda-time-jsptags.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+			<version>${jstl.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>tomcat</groupId>
 			<artifactId>servlet</artifactId>
-			<version>4.1.36</version>
+			<version>${servlet.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
+			<version>${slf4j-api.version}</version>
 		</dependency>
 		
 		<!-- Spring 3 dependencies -->

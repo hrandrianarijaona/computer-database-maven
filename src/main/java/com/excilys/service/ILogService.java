@@ -1,4 +1,4 @@
-package com.excilys.services;
+package com.excilys.service;
 
 import java.sql.Connection;
 

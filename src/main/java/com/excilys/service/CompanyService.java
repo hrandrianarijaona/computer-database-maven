@@ -1,4 +1,4 @@
-package com.excilys.services;
+package com.excilys.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -11,7 +11,7 @@ import com.excilys.connection.ConnectionFactory;
 import com.excilys.dao.CompanyDAO;
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
-import com.excilys.services.ILogService.TypeLog;
+import com.excilys.service.ILogService.TypeLog;
 
 /**
  * Classe singleton de service pour Company

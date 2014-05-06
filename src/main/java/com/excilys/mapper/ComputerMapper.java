@@ -5,7 +5,7 @@ import org.joda.time.DateTime;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
-import com.excilys.services.CompanyService;
+import com.excilys.service.CompanyService;
 
 public class ComputerMapper {
 

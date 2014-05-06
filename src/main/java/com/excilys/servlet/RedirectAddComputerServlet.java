@@ -1,4 +1,4 @@
-package com.excilys.servlets;
+package com.excilys.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.om.Company;
-import com.excilys.services.CompanyService;
+import com.excilys.service.CompanyService;
 
 /**
  * Servlet implementation class RedirectAddComputerServlet

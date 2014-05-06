@@ -1,4 +1,4 @@
-package com.excilys.servlets;
+package com.excilys.servlet;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.om.Computer;
 import com.excilys.om.Page;
-import com.excilys.services.ComputerService;
+import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
 
 /**

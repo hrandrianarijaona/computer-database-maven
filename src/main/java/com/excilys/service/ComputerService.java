@@ -1,4 +1,4 @@
-package com.excilys.services;
+package com.excilys.service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +13,7 @@ import com.excilys.connection.ConnectionFactory;
 import com.excilys.dao.ComputerDAO;
 import com.excilys.dao.LogDAO;
 import com.excilys.om.Computer;
-import com.excilys.services.ILogService.TypeLog;
+import com.excilys.service.ILogService.TypeLog;
 
 
 /**
