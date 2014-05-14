@@ -11,13 +11,13 @@ public interface ComputerDAO {
 	 * Liste tous les ordinateurs/computers repertorié dans la base
 	 * @return
 	 */
-	public List<Computer> getListComputers(Connection connection);
+	public List<Computer> getListComputers();
 	
 	/**
 	 * retourne le nombre de computer/ordinateur dans la base
 	 * @return
 	 */
-	public int getNbComputer(Connection connection);
+	public int getNbComputer();
 	
 	/**
 	 * retourne le nombre de computer/ordinateur dans la base contenant le motif filter
@@ -25,18 +25,18 @@ public interface ComputerDAO {
 	 * @param connection la connection
 	 * @return
 	 */
-	public int getNbComputerFilter(String filter, Connection connection);
+	public int getNbComputerFilter(String filter);
 
 	/**
 	 * Insert un ordinateur/computer dans la base
 	 */
-	public Long insertComputer(Computer cp, Connection connection);
+	public Long insertComputer(Computer cp);
 
 	/**
 	 * Supprime l'ordinateur identifié en paramètre de la base de donnée
 	 * @param id
 	 */
-	public void deleteComputer(Long id, Connection connection);
+	public void deleteComputer(Long id);
 	
 	/**
 	 * Fonction de recherche par filtre
@@ -45,7 +45,7 @@ public interface ComputerDAO {
 	 * @param isAsc true => ascendant / false => descendant
 	 * @return
 	 */
-	public List<Computer> searchComputersByFilteringAndOrdering(String word, int filter, boolean isAsc, Connection connection);
+	public List<Computer> searchComputersByFilteringAndOrdering(String word, int filter, boolean isAsc);
 	
 	
 	/**
@@ -57,7 +57,7 @@ public interface ComputerDAO {
 	 * @param isAsc true => ascendant / false => descendant
 	 * @return
 	 */
-	public List<Computer> searchComputersByFilteringAndOrderingWithRange(String word, int rang, int interval, int filter, boolean isAsc, Connection connection);
+	public List<Computer> searchComputersByFilteringAndOrderingWithRange(String word, int rang, int interval, int filter, boolean isAsc);
 	
 	/**
 	 * Liste tous les ordinateurs/computers repertorié dans la base avec les critères de filtrage et d'ordre
@@ -65,7 +65,7 @@ public interface ComputerDAO {
 	 * @param isAsc true => ascendant / false => descendant
 	 * @return
 	 */
-	public List<Computer> getListComputersByFilteringAndOrdering(int filter, boolean isAsc, Connection connection) ;
+	public List<Computer> getListComputersByFilteringAndOrdering(int filter, boolean isAsc) ;
 	
 	/**
 	 * Liste tous les ordinateurs/computers repertorié dans la base avec les critères de filtrage et d'ordre
@@ -75,6 +75,6 @@ public interface ComputerDAO {
 	 * @param isAsc true => ascendant / false => descendant
 	 * @return
 	 */
-	public List<Computer> getListComputersByFilteringAndOrderingWithRange(int rang, int interval, int filter, boolean isAsc, Connection connection);
+	public List<Computer> getListComputersByFilteringAndOrderingWithRange(int rang, int interval, int filter, boolean isAsc);
 	
 }

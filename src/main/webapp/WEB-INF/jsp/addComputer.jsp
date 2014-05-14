@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <jsp:include page="../../include/header.jsp" />
 <script type="text/javascript" src="lib/jquery.js"></script>
 <script type="text/javascript" src="dist/jquery.validate.js"></script>
@@ -89,47 +90,65 @@
 			});
 </script>
 
+<style>
+.error {
+	color: #ff0000;
+}
+ 
+.errorblock {
+	color: #000;
+	background-color: #ffEEEE;
+	border: 3px solid #ff0000;
+	padding: 8px;
+	margin: 16px;
+}
+</style>
 
 <section id="main">
 
 	<h1>Add Computer</h1>
 
-	<form id="addComputerForm" action="AddComputerServlet" method="POST">
+	<form:form id="addComputerForm" name="addComputerForm" modelAttribute="computerDTO" method="POST" action="addComputer">
+		<form:errors path="*" cssClass="errorblock" element="div" />
 		<fieldset>
 			<div class="clearfix">
 				<label for="name">Computer name:</label>
 				<div class="input-group">
-					<input class="form-control required" type="text" id="name"
-						name="name" /> <span class="input-group-addon">Required</span>
+					<form:input id="name" type="text" path="name"/>
+					<span class="help-inline">Required</span>
+					<span><form:errors path="name" cssClass="error" /></span>
 				</div>
 			</div>
 
 			<div class="clearfix">
 				<label for="introduced">Introduced date:</label>
 				<div class="input-group">
-					<input class="form-control" type="date" id="introducedDate"
-						name="introducedDate" pattern="\d{4}-\d{1,2}-\d{1,2}" /> <span
-						class="input-group-addon">YYYY-MM-DD</span>
+					<form:input path="introducedDate" type="date" id="introducedDate"
+						name="introducedDate" pattern="\d{4}-\d{1,2}-\d{1,2}"/> <span
+						class="help-inline">YYYY-MM-DD</span>
+						<span><form:errors path="introducedDate" cssClass="error" /></span>
 				</div>
 			</div>
 			<div class="clearfix">
 				<label for="discontinued">Discontinued date:</label>
 				<div class="input-group">
-					<input class="form-control" type="date" id="discontinuedDate"
-						name="discontinuedDate" pattern="\d{4}-\d{1,2}-\d{1,2}" /> <span
-						class="input-group-addon">YYYY-MM-DD</span>
+					<form:input path="discontinuedDate" type="date" id="discontinuedDate"
+						name="discontinuedDate" pattern="\d{4}-\d{1,2}-\d{1,2}"/> <span
+						class="help-inline">YYYY-MM-DD</span>
+						<span><form:errors path="discontinuedDate" cssClass="error" /></span>
 				</div>
 			</div>
 			<div class="clearfix">
 				<label for="company">Company Name:</label>
 				<div class="input-group">
-					<select name="company">
-						<option value="0">--</option>
+					
+					<form:select path="idCompany" name="idCompany">
+						<form:option value="0">--</form:option>
 						<c:forEach items="${ companyList }" var="comp">
-							<option value="${ comp.id }"><c:out
-									value="${ comp.name }" /></option>
+							<form:option value="${ comp.id }"><c:out
+									value="${ comp.name }" /></form:option>
 						</c:forEach>
-					</select>
+					</form:select>
 				</div>
 			</div>
 		</fieldset>
@@ -137,7 +156,8 @@
 			<input type="submit" value="Add" class="btn btn-info"> or <a
 				href="RedirectIndexServlet" class="btn btn-default">Cancel</a>
 		</div>
-	</form>
+	</form:form>
+
 
 	<p id="msg_err">
 		

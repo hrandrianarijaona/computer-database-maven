@@ -60,7 +60,7 @@ public class CompanyService {
 		try {
 			connection = connectionFactory.getConnection();
 			log.info("getListCompany... " + connection);
-			lc = companyDAO.getListCompany(connection);
+			lc = companyDAO.getListCompany();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,7 +81,7 @@ public class CompanyService {
 		try {
 			connection = connectionFactory.getConnection();
 			connection.setAutoCommit(false);
-			id = companyDAO.insertCompany(cp, connection);
+			id = companyDAO.insertCompany(cp);
 			log.info("insertCompany(" + id + ")" + connection);
 			logService.addLog("insertCompany(" + id + ")", TypeLog.INFOS, connection);
 			connection.commit();
@@ -115,7 +115,7 @@ public class CompanyService {
 		try {
 			connection = connectionFactory.getConnection();
 			log.info("findCompanyById(" + paramId + ") " + connection);
-			cpy = companyDAO.findCompanyById(paramId, connection);
+			cpy = companyDAO.findCompanyById(paramId);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

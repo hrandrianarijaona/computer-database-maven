@@ -16,6 +16,9 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.connection.ConnectionFactory;
@@ -26,6 +29,11 @@ import com.excilys.om.Computer;
 @Repository
 public class ComputerDAOImpl implements ComputerDAO{
 
+	
+	
+	@Autowired
+	private ConnectionFactory connectionFactory;
+	
 	private ComputerDAOImpl() {
 		// TODO Auto-generated constructor stub
 	}
@@ -44,7 +52,17 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * @param paramId l'id du Computer rechercher
 	 * @return l'instance de la Computer
 	 */
-	public Computer findComputerById(Long paramId, Connection connection){
+	public Computer findComputerById(Long paramId){
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		Computer computer = new Computer();
 
 		// Company company = new Company();
@@ -109,7 +127,18 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * Liste tous les ordinateurs/computers repertorié dans la base
 	 * @return
 	 */
-	public List<Computer> getListComputers(Connection connection) {
+	public List<Computer> getListComputers() {
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		ArrayList<Computer> al = new ArrayList<Computer>();
 
 		// ajoutez ici le code de r�cup�ration des produits
@@ -178,7 +207,18 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * @param rang le rang
 	 * @return
 	 */
-	public List<Computer> getListComputersWithRange(int rang, int interval, Connection connection) {
+	public List<Computer> getListComputersWithRange(int rang, int interval) {
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		ArrayList<Computer> al = new ArrayList<Computer>();
 
 		// ajoutez ici le code de r�cup�ration des produits
@@ -246,7 +286,18 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * retourne le nombre de computer/ordinateur dans la base
 	 * @return
 	 */
-	public int getNbComputer(Connection connection){
+	public int getNbComputer(){
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		// nombre de computer
 		int nb = -99;
 
@@ -294,7 +345,17 @@ public class ComputerDAOImpl implements ComputerDAO{
 	/**
 	 * Insert un ordinateur/computer dans la base
 	 */
-	public Long insertComputer(Computer cp, Connection connection) {
+	public Long insertComputer(Computer cp) {
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
 
 		Long id = null;
 		
@@ -364,7 +425,18 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * Supprime l'ordinateur identifié en paramètre de la base de donnée
 	 * @param id
 	 */
-	public void deleteComputer(Long id, Connection connection){
+	public void deleteComputer(Long id){
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		// la requete
 		String query = "DELETE FROM computer WHERE id=?;";
 		int results = 0;
@@ -400,7 +472,18 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * Liste tous les ordinateurs/computers repertorié dans la base correspondant au motif
 	 * @return
 	 */
-	public List<Computer> searchComputers(String word, Connection connection) {
+	public List<Computer> searchComputers(String word) {
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		ArrayList<Computer> al = new ArrayList<Computer>();
 
 		// requete de recherche du pattern
@@ -471,7 +554,18 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * @param isAsc true => ascendant / false => descendant
 	 * @return
 	 */
-	public List<Computer> searchComputersByFilteringAndOrdering(String word, int filter, boolean isAsc, Connection connection) {
+	public List<Computer> searchComputersByFilteringAndOrdering(String word, int filter, boolean isAsc) {
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		ArrayList<Computer> al = new ArrayList<Computer>();
 
 		String sFilter;
@@ -558,7 +652,18 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * Liste tous les ordinateurs/computers repertorié dans la base correspondant au motif avec intervalle de resultat
 	 * @return
 	 */
-	public List<Computer> searchComputersWithRange(String word, int rang, int interval, Connection connection) {
+	public List<Computer> searchComputersWithRange(String word, int rang, int interval) {
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		ArrayList<Computer> al = new ArrayList<Computer>();
 
 		// requete de recherche du pattern
@@ -635,7 +740,18 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * @param isAsc true => ascendant / false => descendant
 	 * @return
 	 */
-	public List<Computer> searchComputersByFilteringAndOrderingWithRange(String word, int rang, int interval, int filter, boolean isAsc, Connection connection) {
+	public List<Computer> searchComputersByFilteringAndOrderingWithRange(String word, int rang, int interval, int filter, boolean isAsc) {
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		ArrayList<Computer> al = new ArrayList<Computer>();
 
 		String sFilter;
@@ -730,7 +846,18 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * @param isAsc true => ascendant / false => descendant
 	 * @return
 	 */
-	public List<Computer> getListComputersByFilteringAndOrdering(int filter, boolean isAsc, Connection connection) {
+	public List<Computer> getListComputersByFilteringAndOrdering(int filter, boolean isAsc) {
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		ArrayList<Computer> al = new ArrayList<Computer>();
 
 		String sFilter;
@@ -821,7 +948,18 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * @param isAsc true => ascendant / false => descendant
 	 * @return
 	 */
-	public List<Computer> getListComputersByFilteringAndOrderingWithRange(int rang, int interval, int filter, boolean isAsc, Connection connection) {
+	public List<Computer> getListComputersByFilteringAndOrderingWithRange(int rang, int interval, int filter, boolean isAsc) {
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		ArrayList<Computer> al = new ArrayList<Computer>();
 
 		String sFilter;
@@ -911,7 +1049,18 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * Met à jour un Computer de la base
 	 * @param comp le Computer à mettre à jour
 	 */
-	public void updateComputer(Computer comp, Connection connection){
+	public void updateComputer(Computer comp){
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		// ajoutez ici le code d'update d'un Computer
 		String query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
 		int results = 0;
@@ -957,7 +1106,17 @@ public class ComputerDAOImpl implements ComputerDAO{
 	 * @param connection la connection
 	 * @return
 	 */
-	public int getNbComputerFilter(String filter, Connection connection) {
+	public int getNbComputerFilter(String filter) {
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
 		
 		String query = "SELECT COUNT(*) AS nb FROM computer WHERE name LIKE ?;";
 		PreparedStatement pstmt = null;

@@ -69,7 +69,7 @@ public class ComputerService {
 			log.error("Probleme de connection niveau Service");
 			e.printStackTrace();
 		}
-		Computer computer = computerDAO.findComputerById(paramId, connection);
+		Computer computer = computerDAO.findComputerById(paramId);
 		connectionFactory.disconnect();
 		
 		return computer;
@@ -86,7 +86,7 @@ public class ComputerService {
 			connection = connectionFactory.getConnection();
 			log.info("Listing des Computers... " + connection);
 			connection.setAutoCommit(false);
-			lc = computerDAO.getListComputers(connection);
+			lc = computerDAO.getListComputers();
 			logService.addLog("Listing des Computers effectué...", TypeLog.INFOS, connection);
 			connection.commit();
 			connection.setAutoCommit(true);
@@ -125,7 +125,7 @@ public class ComputerService {
 		}
 		List<Computer> lc = null;
 		
-		lc = computerDAO.getListComputersByFilteringAndOrdering(filter, isAsc, connection);
+		lc = computerDAO.getListComputersByFilteringAndOrdering(filter, isAsc);
 		connectionFactory.disconnect();
 		
 		
@@ -150,7 +150,7 @@ public class ComputerService {
 		}
 		List<Computer> lc = null;
 		
-		lc = computerDAO.getListComputersWithRange(rang, interval, connection);
+		lc = computerDAO.getListComputersWithRange(rang, interval);
 		connectionFactory.disconnect();
 		
 		return lc;
@@ -171,7 +171,7 @@ public class ComputerService {
 			log.error("Probleme de connection niveau Service");
 			e.printStackTrace();
 		}
-		int nbComputer = computerDAO.getNbComputer(connection);
+		int nbComputer = computerDAO.getNbComputer();
 		connectionFactory.disconnect();
 		
 		return nbComputer;
@@ -186,7 +186,7 @@ public class ComputerService {
 		try {
 			connection = connectionFactory.getConnection();
 			connection.setAutoCommit(false);
-			id = computerDAO.insertComputer(cp, connection);
+			id = computerDAO.insertComputer(cp);
 			log.info("Insertion du Computer (" + id + ")..." + connection);
 			logService.addLog("Insertion du computer (" + id + ")", TypeLog.INFOS, connection);
 			connection.commit();
@@ -219,7 +219,7 @@ public class ComputerService {
 			connection = connectionFactory.getConnection();
 			
 			connection.setAutoCommit(false);
-			computerDAO.deleteComputer(id, connection);
+			computerDAO.deleteComputer(id);
 			logService.addLog("Delete du computer id(" + id + ")", TypeLog.INFOS, connection);
 			connection.commit();
 			connection.setAutoCommit(true);
@@ -250,7 +250,7 @@ public class ComputerService {
 		try {
 			connection = connectionFactory.getConnection();
 			log.info("searchComputers... " + connection);
-			lc = computerDAO.searchComputers(word, connection);
+			lc = computerDAO.searchComputers(word);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -274,7 +274,7 @@ public class ComputerService {
 		try {
 			connection = connectionFactory.getConnection();
 			log.info("searchComputersByFilteringAndOrdering... " + connection);
-			lc = computerDAO.searchComputersByFilteringAndOrdering(word, filter, isAsc, connection);
+			lc = computerDAO.searchComputersByFilteringAndOrdering(word, filter, isAsc);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -300,7 +300,7 @@ public class ComputerService {
 		try {
 			connection = connectionFactory.getConnection();
 			log.info("searchComputersByFilteringAndOrderingWithRange... " + connection);
-			lc = computerDAO.searchComputersByFilteringAndOrderingWithRange(word, rang, interval, filter, isAsc, connection);
+			lc = computerDAO.searchComputersByFilteringAndOrderingWithRange(word, rang, interval, filter, isAsc);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -321,7 +321,7 @@ public class ComputerService {
 		try {
 			connection = connectionFactory.getConnection();
 			log.info("searchComputersWithRange... " + connection);
-			lc = computerDAO.searchComputersWithRange(word, rang, interval, connection);
+			lc = computerDAO.searchComputersWithRange(word, rang, interval);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -346,7 +346,7 @@ public class ComputerService {
 		try {
 			connection = connectionFactory.getConnection();
 			log.info("getListComputersByFilteringAndOrderingWithRange... " + connection);
-			lc = computerDAO.getListComputersByFilteringAndOrderingWithRange(rang, interval, filter, isAsc, connection);
+			lc = computerDAO.getListComputersByFilteringAndOrderingWithRange(rang, interval, filter, isAsc);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -366,7 +366,7 @@ public class ComputerService {
 			connection = connectionFactory.getConnection();
 			log.info("updateComputer("+ comp.getId() +")... " + connection);
 			connection.setAutoCommit(false);
-			computerDAO.updateComputer(comp, connection);
+			computerDAO.updateComputer(comp);
 			logService.addLog("updateComputer("+ comp.getId() +")... ", TypeLog.INFOS, connection);
 			connection.commit();
 			connection.setAutoCommit(true);
@@ -403,7 +403,7 @@ public class ComputerService {
 			log.error("Probleme de connection niveau Service");
 			e.printStackTrace();
 		}
-		int nbComputer = computerDAO.getNbComputerFilter(filter, connection);
+		int nbComputer = computerDAO.getNbComputerFilter(filter);
 		connectionFactory.disconnect();
 		
 		return nbComputer;

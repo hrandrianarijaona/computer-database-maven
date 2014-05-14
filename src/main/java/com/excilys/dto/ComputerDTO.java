@@ -1,11 +1,21 @@
 package com.excilys.dto;
 
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+import com.excilys.om.Computer;
+
 
 public class ComputerDTO {
 
 	private String id;
+	@NotEmpty
 	private String name;
+	@NotEmpty
+	@Pattern(regexp="[0-9]{4}-[0-1][0-9]-[0-3][0-9]")
 	private String introducedDate;
+	@Pattern(regexp="[0-9]{4}-[0-1][0-9]-[0-3][0-9]")
 	private String discontinuedDate;
 	private String idCompany;
 	
@@ -13,6 +23,23 @@ public class ComputerDTO {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public ComputerDTO(Computer computer){
+		this.id = computer.getId().toString();
+		this.name = computer.getName();
+		
+		
+		if(computer.getIntroducedDate() != null)
+			this.introducedDate = computer.getIntroducedDate().toString("yyyy-MM-dd");
+		else
+			this.introducedDate = "";
+		if(computer.getDiscontinuedDate() != null)
+			this.discontinuedDate = computer.getDiscontinuedDate().toString("yyyy-MM-dd");
+		else
+			this.discontinuedDate = "";
+		this.idCompany = computer.getCompany().getId().toString();
+	}
+	
+
 	public String getId() {
 		return id;
 	}
@@ -63,6 +90,11 @@ public class ComputerDTO {
 		this.idCompany = idCompany;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "ComputerDTO [id=" + id + ", name=" + name + ", introducedDate="
+				+ introducedDate + ", discontinuedDate=" + discontinuedDate
+				+ ", idCompany=" + idCompany + "]";
+	}
 
 }

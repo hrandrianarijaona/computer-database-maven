@@ -14,19 +14,19 @@ public interface CompanyDAO {
 	 * Liste toute les companies répertorié
 	 * @return
 	 */
-	public List<Company> getListCompany(Connection connection);
+	public List<Company> getListCompany();
 
 	/**
 	 * Insert une companie dans la base
 	 * @param cp
 	 */
-	public Long insertCompany(Company cp, Connection connection);
+	public Long insertCompany(Company cp);
 
 	/**
 	 * Recherche la company dans la base de donnée
 	 * @param paramId l'id à rechercher
 	 * @return L'objet Company
 	 */
-	public Company findCompanyById(Long paramId, Connection connection);
+	public Company findCompanyById(Long paramId);
 
 }

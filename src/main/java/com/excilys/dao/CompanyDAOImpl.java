@@ -13,6 +13,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.connection.ConnectionFactory;
@@ -27,7 +30,9 @@ import com.excilys.om.Company;
 @Repository
 public class CompanyDAOImpl implements CompanyDAO{
 	
-
+	@Autowired
+	ConnectionFactory connectionFactory;
+	
 	private CompanyDAOImpl() {
 		// TODO Auto-generated constructor stub
 	}
@@ -44,7 +49,18 @@ public class CompanyDAOImpl implements CompanyDAO{
 	 * Liste toute les companies répertorié
 	 * @return
 	 */
-	public List<Company> getListCompany(Connection connection) {
+	public List<Company> getListCompany() {
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		ArrayList<Company> al = new ArrayList<Company>();
 
 		// requete de recuperation des companies répertorié dans la base
@@ -98,8 +114,18 @@ public class CompanyDAOImpl implements CompanyDAO{
 	 * Insert une companie dans la base
 	 * @param cp
 	 */
-	public Long insertCompany(Company cp, Connection connection) {
+	public Long insertCompany(Company cp) {
 
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		Long id = null;
 		// ajoutez ici le code d'insertion d'un produit
 		String query = "INSERT INTO company(name) VALUES(?);";
@@ -156,7 +182,18 @@ public class CompanyDAOImpl implements CompanyDAO{
 	 * @param paramId l'id à rechercher
 	 * @return L'objet Company
 	 */
-	public Company findCompanyById(Long paramId, Connection connection){
+	public Company findCompanyById(Long paramId){
+		
+		Logger log = LoggerFactory.getLogger(this.getClass());
+		Connection connection = null;
+		try {
+			connection = connectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			log.error("Erreur lors de la demande de connection.");
+		}
+		
 		// Company company = new Company();
 		Company company = Company.builder().build(); // créée par le pattern Builder
 

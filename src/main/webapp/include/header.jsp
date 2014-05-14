@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -16,7 +17,7 @@
 	
 		<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 			<div class="container">
-				<a class="navbar-brand" href="RedirectIndexServlet"> Application - Computer Database </a>
+				<a class="navbar-brand" href="RedirectIndexServlet"> <spring:message code="contents.header" text="Application - Computer Database" /> </a>
 			</div>
 		</nav>
 	</header>
