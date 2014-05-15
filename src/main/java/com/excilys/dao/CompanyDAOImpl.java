@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.connection.ConnectionFactory;
+import com.excilys.connection.JdbcDatasource;
 import com.excilys.connection.ProjetConnection;
 import com.excilys.om.Company;
 
@@ -30,8 +31,11 @@ import com.excilys.om.Company;
 @Repository
 public class CompanyDAOImpl implements CompanyDAO{
 	
+//	@Autowired
+//	ConnectionFactory connectionFactory;
+	
 	@Autowired
-	ConnectionFactory connectionFactory;
+	private JdbcDatasource jdbcDatasource;
 	
 	private CompanyDAOImpl() {
 		// TODO Auto-generated constructor stub
@@ -54,7 +58,8 @@ public class CompanyDAOImpl implements CompanyDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+//			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -89,18 +94,7 @@ public class CompanyDAOImpl implements CompanyDAO{
 				e.printStackTrace();
 				System.out.println("Problème dans la requete de listing...");
 			} finally{
-				try {
-
-					if(results != null)
-						results.close();
-					if(stmt != null)
-						stmt.close();
-
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jdbcDatasource.closeObject(results, stmt, connection);
 			}
 		}
 		else{
@@ -119,7 +113,7 @@ public class CompanyDAOImpl implements CompanyDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -150,7 +144,8 @@ public class CompanyDAOImpl implements CompanyDAO{
 				}
 				
 				// fermeture de rsId
-				ConnectionFactory.closeObject(rsId);
+//				ConnectionFactory.closeObject(rsId);
+				jdbcDatasource.closeObject(rsId);
 				
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
@@ -163,15 +158,7 @@ public class CompanyDAOImpl implements CompanyDAO{
 			e.printStackTrace();
 			System.out.println("Probleme dans la requete d'insertion...");
 		}finally{
-			try {
-
-				if(pstmt != null)
-					pstmt.close();
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			jdbcDatasource.closeObject(results, pstmt, connection);
 		}
 
 		return id;
@@ -187,7 +174,7 @@ public class CompanyDAOImpl implements CompanyDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -222,17 +209,7 @@ public class CompanyDAOImpl implements CompanyDAO{
 				e.printStackTrace();
 				System.out.println("Problème dans la requete de recherche de company...");
 			} finally{
-				try {
-
-					if(results != null)
-						results.close();
-					if(pstmt != null)
-						pstmt.close();
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jdbcDatasource.closeObject(results, pstmt, connection);
 			}
 		}
 		else{

@@ -4,7 +4,18 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+       xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="	http://www.springframework.org/schema/beans 
+       						http://www.springframework.org/schema/beans/spring-beans.xsd 
+       						http://www.springframework.org/schema/mvc 
+       						http://www.springframework.org/schema/mvc/spring-mvc.xsd 
+       						http://www.springframework.org/schema/context 
+       						http://www.springframework.org/schema/context/spring-context.xsd
+       						http://www.springframework.org/schema/tx
+							http://www.springframework.org/schema/tx/spring-tx.xsd
+							http://www.springframework.org/schema/aop
+							http://www.springframework.org/schema/aop/spring-aop.xsd">
  
  	<!-- support JSR303 annotation if JSR 303 validation present on classpath -->
 	<mvc:annotation-driven />
@@ -15,6 +26,7 @@
  	<mvc:resources mapping="/css/**" location="/css/" />
  	<mvc:resources mapping="/fonts/**" location="/fonts/" />
  	<mvc:resources mapping="/js/**" location="/js/" />
+ 	<mvc:resources mapping="/Images/**" location="/Images/" />
  	
     <!-- Scan for spring annotated components -->
     <context:component-scan base-package="com.excilys"/>
@@ -50,8 +62,72 @@
 			<property name="paramName" value="language" />
 		</bean>
 	</mvc:interceptors>
-	
-	
+    
+    
+	<!-- Mis en place de la DataSource -->
+	<bean id="jdbcDatasource" class="com.excilys.connection.JdbcDatasource">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
- 
+    <!-- the DataSource -->
+    <bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+
+	<!-- Gestion des transactions -->
+	<!-- Le Manager -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- Config transaction des DAOs -->
+	<tx:advice id="DAOtxAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" propagation="MANDATORY" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- Config transaction des Services -->
+	<tx:advice id="ServicetxAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(*com.excilys.dao.*.*(..))" id="DAOTransaction"/>
+		<aop:advisor advice-ref="ServicetxAdvice" pointcut-ref="ServiceTransaction"/>
+	</aop:config>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(*com.excilys.service.*.*(..))" id="ServiceTransaction"/>
+		<aop:advisor advice-ref="DAOtxAdvice" pointcut-ref="DAOTransaction"/>
+	</aop:config>
+
+	<!-- Test example transaction 
+	<bean id="transactionInterceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="txManager" ref="txManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="purchase">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="proxyService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target" ref="computerDAO" />
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+			</list>
+		</property>
+	</bean>
+ -->
 </beans>

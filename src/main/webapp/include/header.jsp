@@ -12,12 +12,23 @@
 <link href="css/main.css" rel="stylesheet" media="screen">
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"> </script>
 </head>
+
+<c:set var="liste_param">
+	<c:forEach items="${ param }" var="p">
+		<c:if test="${ p.key != 'language' }">
+			&<c:out value="${p.key}" />=<c:out value="${p.value}" />
+		</c:if>
+	</c:forEach>
+</c:set>
+
 <body>
 	<header class="topbar">
 	
 		<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 			<div class="container">
-				<a class="navbar-brand" href="RedirectIndexServlet"> <spring:message code="contents.header" text="Application - Computer Database" /> </a>
+				<a class="navbar-brand" href="RedirectIndexServlet"> <spring:message code="dashboard.header" text="Application - Computer Database" /> </a>
 			</div>
+			
+			<a href="?language=en${liste_param}"><img src="Images/english.gif" /></a>|<a href="?language=fr${liste_param}"><img src="Images/french.jpg" /></a>
 		</nav>
 	</header>

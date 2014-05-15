@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <jsp:include page="../../include/header.jsp" />
 <script type="text/javascript" src="lib/jquery.js"></script>
 <script type="text/javascript" src="dist/jquery.validate.js"></script>
@@ -105,9 +106,16 @@
 }
 </style>
 
+<c:set var="edit">
+	<spring:message code="edit.button.edit" text="Edit" />
+</c:set>
+<c:set var="cancel">
+	<spring:message code="edit.button.cancel" text="Cancel" />
+</c:set>
+
 <section id="main">
 
-	<h1>Edit Computer</h1>
+	<h1><spring:message code="edit.title" text="Edit Computer" /></h1>
 
 	<form:form id="editComputerForm" name="editComputerForm" modelAttribute="computerDTO" method="POST" action="editComputer">
 		<form:errors path="*" cssClass="errorblock" element="div" />
@@ -115,16 +123,16 @@
 		<span><form:errors path="id" cssClass="error" /></span>
 		<fieldset>
 			<div class="clearfix">
-				<label for="name">Computer name:</label>
+				<label for="name"><spring:message code="edit.computer_name" text="Computer name" />:</label>
 				<div class="input-group">
 					<form:input path="name" type="text" id="name"/> 
-						<span class="help-inline">Required</span>
+						<span class="help-inline"><spring:message code="edit.required" text="Required" /></span>
 						<span><form:errors path="name" cssClass="error" /></span>
 				</div>
 			</div>
 
 			<div class="clearfix">
-				<label for="introduced">Introduced date:</label>
+				<label for="introduced"><spring:message code="edit.introduced" text="Introduced date" />:</label>
 				<div class="input-group">
 					<form:input path="introducedDate" type="text" id="introducedDate"
 						value="${computerDTO.introducedDate}"
@@ -134,7 +142,7 @@
 				</div>
 			</div>
 			<div class="clearfix">
-				<label for="discontinued">Discontinued date:</label>
+				<label for="discontinued"><spring:message code="edit.discontinued" text="Discontinued date" />:</label>
 				<div class="input-group">
 					<form:input path="discontinuedDate" type="text" id="discontinuedDate"
 						value="${computerDTO.discontinuedDate}"
@@ -144,7 +152,7 @@
 				</div>
 			</div>
 			<div class="clearfix">
-				<label for="company">Company Name:</label>
+				<label for="company"><spring:message code="edit.company" text="Company name" />:</label>
 				<div class="input-group">
 					<form:select path="idCompany" name="company">
 						<option value="0">--<option>
@@ -167,8 +175,8 @@
 			</div>
 		</fieldset>
 		<div class="actions">
-			<input type="submit" value="Edit" class="btn btn-info"> or <a
-				href="RedirectIndexServlet" class="btn btn-default">Cancel</a>
+			<input type="submit" value="${ edit }" class="btn btn-info"> <spring:message code="edit.or" text="or" /> <a
+				href="RedirectIndexServlet" class="btn btn-default">${ cancel }</a>
 		</div>
 	</form:form>
 	<p id="msg_err">

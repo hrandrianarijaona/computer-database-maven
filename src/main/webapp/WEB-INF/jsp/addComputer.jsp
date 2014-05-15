@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <jsp:include page="../../include/header.jsp" />
 <script type="text/javascript" src="lib/jquery.js"></script>
 <script type="text/javascript" src="dist/jquery.validate.js"></script>
@@ -104,24 +105,31 @@
 }
 </style>
 
+<c:set var="add">
+	<spring:message code="add.button.add" text="Add" />
+</c:set>
+<c:set var="cancel">
+	<spring:message code="add.button.cancel" text="Cancel" />
+</c:set>
+
 <section id="main">
 
-	<h1>Add Computer</h1>
+	<h1><spring:message code="add.title" text="Add Computer" /></h1>
 
 	<form:form id="addComputerForm" name="addComputerForm" modelAttribute="computerDTO" method="POST" action="addComputer">
 		<form:errors path="*" cssClass="errorblock" element="div" />
 		<fieldset>
 			<div class="clearfix">
-				<label for="name">Computer name:</label>
+				<label for="name"><spring:message code="add.computer_name" text="Computer name" />:</label>
 				<div class="input-group">
 					<form:input id="name" type="text" path="name"/>
-					<span class="help-inline">Required</span>
+					<span class="help-inline"><spring:message code="add.required" text="Required" /></span>
 					<span><form:errors path="name" cssClass="error" /></span>
 				</div>
 			</div>
 
 			<div class="clearfix">
-				<label for="introduced">Introduced date:</label>
+				<label for="introduced"><spring:message code="add.introduced" text="Introduced date" />:</label>
 				<div class="input-group">
 					<form:input path="introducedDate" type="date" id="introducedDate"
 						name="introducedDate" pattern="\d{4}-\d{1,2}-\d{1,2}"/> <span
@@ -130,7 +138,7 @@
 				</div>
 			</div>
 			<div class="clearfix">
-				<label for="discontinued">Discontinued date:</label>
+				<label for="discontinued"><spring:message code="add.discontinued" text="Discontinued date" />:</label>
 				<div class="input-group">
 					<form:input path="discontinuedDate" type="date" id="discontinuedDate"
 						name="discontinuedDate" pattern="\d{4}-\d{1,2}-\d{1,2}"/> <span
@@ -139,7 +147,7 @@
 				</div>
 			</div>
 			<div class="clearfix">
-				<label for="company">Company Name:</label>
+				<label for="company"><spring:message code="add.company" text="Company name" />:</label>
 				<div class="input-group">
 					
 					<form:select path="idCompany" name="idCompany">
@@ -153,8 +161,8 @@
 			</div>
 		</fieldset>
 		<div class="actions">
-			<input type="submit" value="Add" class="btn btn-info"> or <a
-				href="RedirectIndexServlet" class="btn btn-default">Cancel</a>
+			<input type="submit" value="${ add }" class="btn btn-info"> <spring:message code="add.or" text="or" /> <a
+				href="RedirectIndexServlet" class="btn btn-default">${ cancel }</a>
 		</div>
 	</form:form>
 

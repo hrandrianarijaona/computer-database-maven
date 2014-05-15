@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.connection.ConnectionFactory;
+import com.excilys.connection.JdbcDatasource;
 import com.excilys.connection.ProjetConnection;
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
@@ -29,10 +30,13 @@ import com.excilys.om.Computer;
 @Repository
 public class ComputerDAOImpl implements ComputerDAO{
 
-	
-	
+	@Autowired
+	private JdbcDatasource jdbcDatasource;
+
+/*
 	@Autowired
 	private ConnectionFactory connectionFactory;
+*/
 	
 	private ComputerDAOImpl() {
 		// TODO Auto-generated constructor stub
@@ -56,7 +60,8 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+//			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -103,17 +108,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 				e.printStackTrace();
 				System.out.println("Problème dans la requete de recherche de company...");
 			} finally{
-				try {
-
-					if(results != null)
-						results.close();
-					if(pstmt != null)
-						pstmt.close();
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jdbcDatasource.closeObject(results, pstmt, connection);
 			}
 		}
 		else{
@@ -132,7 +127,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -181,17 +176,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 				e.printStackTrace();
 				System.out.println("Problème dans la requete de listing niveau DAO...");
 			} finally{
-				try {
-
-					if(results != null)
-						results.close();
-					if(stmt != null)
-						stmt.close();
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jdbcDatasource.closeObject(results, stmt, connection);
 			}
 		}
 		else{
@@ -212,7 +197,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -261,17 +246,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 				e.printStackTrace();
 				System.out.println("Problème dans la requete de listing...");
 			} finally{
-				try {
-
-					if(results != null)
-						results.close();
-					if(pstmt != null)
-						pstmt.close();
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jdbcDatasource.closeObject(results, pstmt, connection);
 			}
 		}
 		else{
@@ -291,7 +266,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -322,17 +297,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 				e.printStackTrace();
 				System.out.println("Problème dans la requete de comptage de computer...");
 			} finally{
-				try {
-
-					if(results != null)
-						results.close();
-					if(stmt != null)
-						stmt.close();
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jdbcDatasource.closeObject(results, stmt, connection);
 			}
 		}
 		else{
@@ -350,7 +315,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -394,7 +359,8 @@ public class ComputerDAOImpl implements ComputerDAO{
 				}
 				
 				// fermeture de rsId
-				ConnectionFactory.closeObject(rsId);
+				//ConnectionFactory.closeObject(rsId);
+				jdbcDatasource.closeObject(rsId);
 				
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
@@ -407,15 +373,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 			e.printStackTrace();
 			System.out.println("Probleme dans la requete d'insertion...");
 		}finally{
-			try {
-
-				if(pstmt != null)
-					pstmt.close();
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			jdbcDatasource.closeObject(results, pstmt, connection);
 		}
 		return id;
 
@@ -430,7 +388,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -456,15 +414,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 			e.printStackTrace();
 			System.out.println("Probleme dans la requete de suppression...");
 		}finally{
-			try {
-
-				if(pstmt != null)
-					pstmt.close();
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			jdbcDatasource.closeObject(results, pstmt, connection);
 		}
 	}
 
@@ -477,7 +427,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -527,17 +477,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 				e.printStackTrace();
 				System.out.println("Problème dans la requete de recherche...");
 			} finally{
-				try {
-
-					if(results != null)
-						results.close();
-					if(pstmt != null)
-						pstmt.close();
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jdbcDatasource.closeObject(results, pstmt, connection);
 			}
 		}
 		else{
@@ -559,7 +499,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -628,17 +568,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 				e.printStackTrace();
 				System.out.println("Problème dans la requete de recherche...");
 			} finally{
-				try {
-
-					if(results != null)
-						results.close();
-					if(pstmt != null)
-						pstmt.close();
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jdbcDatasource.closeObject(results, pstmt, connection);
 			}
 		}
 		else{
@@ -657,7 +587,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -711,17 +641,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 				e.printStackTrace();
 				System.out.println("Problème dans la requete de recherche...");
 			} finally{
-				try {
-
-					if(results != null)
-						results.close();
-					if(pstmt != null)
-						pstmt.close();
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jdbcDatasource.closeObject(results, pstmt, connection);
 			}
 		}
 		else{
@@ -745,7 +665,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -820,17 +740,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 				e.printStackTrace();
 				System.out.println("Problème dans la requete de recherche...");
 			} finally{
-				try {
-
-					if(results != null)
-						results.close();
-					if(pstmt != null)
-						pstmt.close();
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jdbcDatasource.closeObject(results, pstmt, connection);
 			}
 		}
 		else{
@@ -851,7 +761,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -919,17 +829,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 				e.printStackTrace();
 				System.out.println("Problème dans la requete de listing...");
 			} finally{
-				try {
-
-					if(results != null)
-						results.close();
-					if(stmt != null)
-						stmt.close();
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jdbcDatasource.closeObject(results, stmt, connection);
 			}
 		}
 		else{
@@ -953,7 +853,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -1024,17 +924,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 				e.printStackTrace();
 				System.out.println("Problème dans la requete de listing...");
 			} finally{
-				try {
-
-					if(results != null)
-						results.close();
-					if(pstmt != null)
-						pstmt.close();
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jdbcDatasource.closeObject(results, pstmt, connection);
 			}
 		}
 		else{
@@ -1054,7 +944,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -1087,15 +977,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 			e.printStackTrace();
 			System.out.println("Probleme dans la requete de mis à jour...");
 		}finally{
-			try {
-
-				if(pstmt != null)
-					pstmt.close();
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			jdbcDatasource.closeObject(results, pstmt, connection);
 		}
 	}
 
@@ -1111,7 +993,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 		Logger log = LoggerFactory.getLogger(this.getClass());
 		Connection connection = null;
 		try {
-			connection = connectionFactory.getConnection();
+			connection = jdbcDatasource.getConnection();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -1137,15 +1019,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 			e.printStackTrace();
 			System.out.println("Probleme dans le count de resultat...");
 		}finally{
-			try {
-
-				if(pstmt != null)
-					pstmt.close();
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			jdbcDatasource.closeObject(results, pstmt, connection);
 		}
 		
 		return nb;
