@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.connection.ConnectionFactory;
+import com.excilys.connection.JdbcDatasource;
 import com.excilys.dao.CompanyDAOImpl;
 import com.excilys.om.Company;
 import com.excilys.om.Computer;
@@ -22,6 +24,7 @@ import com.excilys.service.LogService.TypeLog;
  *
  */
 @Service
+@Transactional
 public class CompanyService {
 	
 	private Logger log = null;
@@ -29,15 +32,12 @@ public class CompanyService {
 	@Autowired
 	private LogServiceImpl logService;
 	@Autowired
-	private ConnectionFactory connectionFactory;
-	@Autowired
 	private CompanyDAOImpl companyDAO;
 	
 	@Autowired
-	public CompanyService(ConnectionFactory connectionFactory, CompanyDAOImpl companyDAO, LogServiceImpl logService) {
+	public CompanyService(JdbcDatasource jdbcDatasource, CompanyDAOImpl companyDAO, LogServiceImpl logService) {
 		// TODO Auto-generated constructor stub
 		log = LoggerFactory.getLogger(this.getClass());
-		this.connectionFactory = connectionFactory;
 		this.companyDAO = companyDAO;
 		this.logService = logService;
 	}
@@ -54,19 +54,11 @@ public class CompanyService {
 	 * Liste toute les Company dans la base de donnée
 	 * @return
 	 */
+	@Transactional(readOnly=true)
 	public List<Company> getListCompany() {
-		Connection connection = null;
 		List<Company> lc = null;
-		try {
-			connection = connectionFactory.getConnection();
-			log.info("getListCompany... " + connection);
-			lc = companyDAO.getListCompany();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			log.error("Probleme dans getListCompany...");
-		}
-		connectionFactory.disconnect();
+		log.info("getListCompany... ");
+		lc = companyDAO.getListCompany();
 		
 		return lc;
 	}
@@ -75,32 +67,13 @@ public class CompanyService {
 	 * Insert une companie dans la base
 	 * @param cp
 	 */
+	@Transactional(readOnly=false, rollbackFor={RuntimeException.class, SQLException.class})
 	public void insertCompany(Company cp) {
-		Connection connection = null;
 		Long id = null;
-		try {
-			connection = connectionFactory.getConnection();
-			connection.setAutoCommit(false);
-			id = companyDAO.insertCompany(cp);
-			log.info("insertCompany(" + id + ")" + connection);
-			logService.addLog("insertCompany(" + id + ")", TypeLog.INFOS, connection);
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			log.error("Probleme lors de insertCompany... on rollback");
-			try {
-				connection.rollback();
-				connection.setAutoCommit(true);
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				log.error("Probleme dans le rollback du insertCompany...");
-			}
-			
-		}
-		connectionFactory.disconnect();
+		//			connection.setAutoCommit(false);
+					id = companyDAO.insertCompany(cp);
+					log.info("insertCompany(" + id + ")");
+		//			logService.addLog("insertCompany(" + id + ")", TypeLog.INFOS, connection);
 		
 	}
 	
@@ -109,19 +82,11 @@ public class CompanyService {
 	 * @param paramId l'id à rechercher
 	 * @return L'objet Company
 	 */
+	@Transactional(readOnly=true)
 	public Company findCompanyById(Long paramId){
-		Connection connection = null;
 		Company cpy = null;
-		try {
-			connection = connectionFactory.getConnection();
-			log.info("findCompanyById(" + paramId + ") " + connection);
-			cpy = companyDAO.findCompanyById(paramId);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			log.error("Probleme dans findCompanyById(" + paramId + ") ");
-		}
-		connectionFactory.disconnect();
+		log.info("findCompanyById(" + paramId + ") ");
+		cpy = companyDAO.findCompanyById(paramId);
 		
 		return cpy;
 	}

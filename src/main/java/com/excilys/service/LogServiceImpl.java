@@ -6,10 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.dao.LogDAOImpl;
 
 @Service
+@Transactional
 public class LogServiceImpl implements LogService {
 	
 	private Logger log = null;
@@ -28,6 +30,7 @@ public class LogServiceImpl implements LogService {
 	 * @param msg le message
 	 * @param type le type de log
 	 */
+	@Transactional(readOnly=false)
 	public void addLog(String msg, TypeLog type, Connection connection) {
 		
 		String sType = null;

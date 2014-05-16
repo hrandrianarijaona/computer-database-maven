@@ -46,6 +46,10 @@
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.js</url-pattern>
 	</servlet-mapping>
-  
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/jsp/errors/404.jsp</location>
+	</error-page>
   
 </web-app>
